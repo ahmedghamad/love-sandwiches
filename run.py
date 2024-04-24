@@ -31,6 +31,7 @@ def get_sales_data():
             print("Data is valid!")
             break
     return sales_data
+
 def validate_data(values):
     """
     Inside the try, converts all the string values into intgers.
@@ -69,12 +70,23 @@ def calculate_surplus_data(sales_row):
     print ("calculating surplus data...\n")
     stock = SHEET.worksheet("stock").get_all_values()
     stock_row = stock[-1]
-    
+
     surplus_data = []
     for sandwiches_in_stock, sandwiches_sold in zip(stock_row, sales_row):
         surplus = int(sandwiches_in_stock) - sandwiches_sold
         surplus_data.append(surplus)
     return surplus_data
+
+def update_surplus_worksheet(data):
+    """
+    Update surplus worksheet, add new row with the list data provided.
+
+    """
+    print("Updating surplus worksheet...\n")
+    surplus_worksheet = SHEET.worksheet("surplus")
+    surplus_worksheet.append_row(data)
+    print("Surplus worksheet updated successfully.\n")
+
 
 
 
@@ -83,7 +95,7 @@ def main():
     sales_data = [int(num) for num in data]
     update_sales_worksheet(sales_data)
     new_surplus_data = calculate_surplus_data(sales_data)
-    print(new_surplus_data)
+    update_surplus_worksheet(new_surplus_data)
 
 print("Welcome to love Sandwiches Data Automation")
 main()
